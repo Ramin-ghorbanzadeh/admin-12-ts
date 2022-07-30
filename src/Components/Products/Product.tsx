@@ -5,22 +5,22 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addToCart, removeFromCart } from './../../Slices/CartSlice';
 import { useEffect, useState } from "react";
 
-const Product: React.FC<CartItem> = ({ productId, productName, productPrice }) => {
+const Product: React.FC<CartItem> = ({ productId, productName, productPrice, Count }) => {
     const carts = useSelector((state: RootState) => state.cart.value)
     const dispatch = useDispatch()
     const [storeIndex, setStoreIndex] = useState(-1);
+    const [storeCount, setStoreCount] = useState(0);
     useEffect(() => {
         const index = carts.findIndex(function (item: CartItem) {
             return item.productId === productId;
         });
         setStoreIndex(index);
+        if(index>=0)
+            setStoreCount(carts[index].Count)
     })
     const add = () => {
-        const data: CartItem = { productId, productName, productPrice };
-        const index = carts.findIndex(function (item: CartItem) {
-            return item.productId === productId;
-        });
-        if (index < 0) dispatch(addToCart(data));
+        const data: CartItem = { productId, productName, productPrice, Count };
+        dispatch(addToCart(data));
 
     }
 
@@ -32,7 +32,11 @@ const Product: React.FC<CartItem> = ({ productId, productName, productPrice }) =
             {(storeIndex < 0) ?
                 <button className="btn" onClick={add}>Add</button>
                 :
-                <button className="btn btn-error" onClick={() => dispatch(removeFromCart(productId))}>remove</button>
+                <div className="flex justify-center items-center">
+                    <button className="btn btn-error" onClick={() => dispatch(removeFromCart(productId))}>-</button>
+                    <span className="w-4 block mx-3 text-center">{storeCount}</span>
+                    <button className="btn" onClick={add}>+</button>
+                </div>
             }
         </div>
     )

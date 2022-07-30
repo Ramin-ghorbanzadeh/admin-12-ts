@@ -12,6 +12,7 @@ import Content_visitors from './Components/Content/Content-visitors'
 import Products from './Components/Products';
 import { useSelector } from 'react-redux';
 import { RootState } from './app/store';
+import Cart from './Components/Cart';
 function App() {
   const carts = useSelector((state: RootState) => state.cart.value)
   const [showSidebar, setShowSidebar] = useState(false);
@@ -36,7 +37,8 @@ function App() {
         <Content_sales />
         <Content_visitors /> */}
         <Products/>
-        {carts.map((item)=><div><h1>{item.productName+' : '+item.productPrice}</h1><br/></div>)}
+        <Cart/>
+       
         <Footer />
       </section>
     </main>
